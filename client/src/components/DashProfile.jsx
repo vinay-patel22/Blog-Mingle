@@ -14,9 +14,10 @@ import {
 } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 
 export default function DashProfile() {
-    const { currentUser, error } = useSelector((state) => state.user);
+    const { currentUser, error, loading } = useSelector((state) => state.user);
     const [imageFile, setImageFile] = useState(null);
     const [imageFileUrl, setImageFileUrl] = useState(null);
     const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -72,47 +73,6 @@ export default function DashProfile() {
             setImageFileUploading(false); // Ensure uploading state is false even if there is an error
         }
     };
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setUpdateUserError(null);
-    //     setUpdateUserSuccess(null);
-
-    //     // Ensure the upload has finished
-    //     if (Object.keys(formData).length === 0) {
-    //         setUpdateUserError('No changes made');
-    //         return;
-    //     }
-
-    //     if (imageFileUploading) {
-    //         setUpdateUserError('Please wait for image to upload'); // Ensure the error shows only if still uploading
-    //         return;
-    //     }
-
-    //     try {
-    //         dispatch(updateStart());
-    //         const res = await fetch(`/api/user/update/${currentUser._id}`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify(formData),
-    //         });
-    //         const data = await res.json();
-    //         if (!res.ok) {
-    //             dispatch(updateFailure(data.message));
-    //             setUpdateUserError(data.message);
-    //         } else {
-    //             dispatch(updateSuccess(data));
-    //             setUpdateUserSuccess("User's profile updated successfully");
-    //         }
-    //     } catch (error) {
-    //         dispatch(updateFailure(error.message));
-    //         setUpdateUserError(error.message);
-    //     }
-    // };
-
-
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -253,9 +213,25 @@ export default function DashProfile() {
                     placeholder='password'
                     onChange={handleChange}
                 />
-                <Button type='submit' gradientDuoTone='purpleToBlue' outline>
-                    Update
+                <Button
+                    type='submit'
+                    gradientDuoTone='tealToLime'
+                    outline
+                    disabled={loading || imageFileUploading}
+                >
+                    {loading ? 'Loading...' : 'Update'}
                 </Button>
+                {currentUser.isAdmin && (
+                    <Link to={'/create-post'}>
+                        <Button
+                            type='button'
+                            gradientDuoTone='tealToLime'
+                            className='w-full'
+                        >
+                            Create a post
+                        </Button>
+                    </Link>
+                )}
             </form>
             <div className='text-red-500 flex justify-between mt-5'>
                 <span onClick={() => setShowModal(true)} className='cursor-pointer'>
