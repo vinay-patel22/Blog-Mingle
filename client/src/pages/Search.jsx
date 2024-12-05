@@ -10,13 +10,11 @@ export default function Search() {
         category: 'uncategorized',
     });
 
-    console.log(sidebarData);
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showMore, setShowMore] = useState(false);
 
     const location = useLocation();
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -41,15 +39,13 @@ export default function Search() {
                 setLoading(false);
                 return;
             }
-            if (res.ok) {
-                const data = await res.json();
-                setPosts(data.posts);
-                setLoading(false);
-                if (data.posts.length === 9) {
-                    setShowMore(true);
-                } else {
-                    setShowMore(false);
-                }
+            const data = await res.json();
+            setPosts(data.posts);
+            setLoading(false);
+            if (data.posts.length === 9) {
+                setShowMore(true);
+            } else {
+                setShowMore(false);
             }
         };
         fetchPosts();
@@ -89,58 +85,95 @@ export default function Search() {
         if (!res.ok) {
             return;
         }
-        if (res.ok) {
-            const data = await res.json();
-            setPosts([...posts, ...data.posts]);
-            if (data.posts.length === 9) {
-                setShowMore(true);
-            } else {
-                setShowMore(false);
-            }
+        const data = await res.json();
+        setPosts([...posts, ...data.posts]);
+        if (data.posts.length === 9) {
+            setShowMore(true);
+        } else {
+            setShowMore(false);
         }
+    };
+
+    // Reset filters logic
+    const handleResetFilters = () => {
+        setSidebarData({
+            searchTerm: '',
+            sort: 'desc',
+            category: 'uncategorized',
+        });
+        // Clear the URL search parameters and navigate to show all posts
+        const resetParams = new URLSearchParams();
+        navigate(`/search?${resetParams.toString()}`);
     };
 
     return (
         <div className='flex flex-col md:flex-row'>
-            <div className='p-7 border-b md:border-r md:min-h-screen border-gray-500'>
-                <form className='flex flex-col gap-8' onSubmit={handleSubmit}>
-                    <div className='flex   items-center gap-2'>
-                        <label className='whitespace-nowrap font-semibold'>
-                            Search Term:
-                        </label>
+            <div className="p-7 border-b md:border-r md:min-h-screen border-gray-500 w-full md:w-1/3">
+                <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+                    {/* Search Term Section */}
+                    <div className="flex flex-col md:flex-row items-center gap-2 w-full">
+                        <label className="font-semibold w-full md:w-1/3">Search Term:</label>
                         <TextInput
-                            placeholder='Search...'
-                            id='searchTerm'
-                            type='text'
+                            placeholder="Search..."
+                            id="searchTerm"
+                            type="text"
                             value={sidebarData.searchTerm}
                             onChange={handleChange}
+                            className="w-full md:w-2/3"
                         />
                     </div>
-                    <div className='flex items-center gap-2'>
-                        <label className='font-semibold'>Sort:</label>
-                        <Select onChange={handleChange} value={sidebarData.sort} id='sort'>
-                            <option value='desc'>Latest</option>
-                            <option value='asc'>Oldest</option>
+
+                    {/* Sort Section */}
+                    <div className="flex flex-col md:flex-row items-center gap-2 w-full">
+                        <label className="font-semibold w-full md:w-1/3">Sort:</label>
+                        <Select
+                            onChange={handleChange}
+                            value={sidebarData.sort}
+                            id="sort"
+                            className="w-full md:w-2/3"
+                        >
+                            <option value="desc">Latest</option>
+                            <option value="asc">Oldest</option>
                         </Select>
                     </div>
-                    <div className='flex items-center gap-2'>
-                        <label className='font-semibold'>Category:</label>
+
+                    {/* Category Section */}
+                    <div className="flex flex-col md:flex-row items-center gap-2 w-full">
+                        <label className="font-semibold w-full md:w-1/3">Category:</label>
                         <Select
                             onChange={handleChange}
                             value={sidebarData.category}
-                            id='category'
+                            id="category"
+                            className="w-full md:w-2/3"
                         >
-                            <option value='uncategorized'>Uncategorized</option>
-                            <option value='reactjs'>React.js</option>
-                            <option value='nextjs'>Next.js</option>
-                            <option value='javascript'>JavaScript</option>
+                            <option value="uncategorized">Uncategorized</option>
+                            <option value="reactjs">React.js</option>
+                            <option value="nextjs">Next.js</option>
+                            <option value="javascript">JavaScript</option>
                         </Select>
                     </div>
-                    <Button type='submit' outline gradientDuoTone='tealToLime'>
-                        Apply Filters
-                    </Button>
+
+                    {/* Apply Filters Button */}
+                    <div className="flex justify-center w-full mt-4">
+                        <Button type="submit" outline gradientDuoTone="tealToLime" className="w-full md:w-2/3">
+                            Apply Filters
+                        </Button>
+                    </div>
                 </form>
+
+                {/* Reset Filters Button */}
+                <div className="flex justify-center w-full mt-4">
+                    <Button
+                        onClick={handleResetFilters}
+                        outline
+                        color="gray"
+                        className="w-full md:w-2/3 flex items-center justify-center"
+                    >
+                        Reset Filters
+                    </Button>
+                </div>
             </div>
+
             <div className='w-full'>
                 <h1 className='text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5 '>
                     Posts results:

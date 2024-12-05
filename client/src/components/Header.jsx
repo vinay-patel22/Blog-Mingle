@@ -62,7 +62,7 @@ export default function Header() {
       <form onSubmit={handleSubmit}>
         <TextInput
           type='text'
-          placeholder='Search...'
+          placeholder='Search tech you like...'
           rightIcon={AiOutlineSearch}
           className='hidden lg:inline'
           value={searchTerm}
