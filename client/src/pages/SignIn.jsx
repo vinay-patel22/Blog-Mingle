@@ -1,23 +1,25 @@
-import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  signInStart,
-  signInSuccess,
-  signInFailure,
-} from '../redux/user/userSlice';
+import { signInFailure, signInStart, signInSuccess, resetError } from '../redux/user/userSlice';
+import { useNavigate, Link } from 'react-router-dom';
+import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
 import OAuth from '../components/OAuth';
-
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Reset the error state when the component is mounted
+  useEffect(() => {
+    dispatch(resetError());
+  }, [dispatch]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
@@ -43,50 +45,45 @@ export default function SignIn() {
       dispatch(signInFailure(error.message));
     }
   };
+
   return (
-    <div className='min-h-screen mt-20'>
-      <div className='flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5'>
+    <div className="min-h-screen mt-20">
+      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
         {/* left */}
-        <div className='flex-1'>
-          <Link to='/' className='font-bold dark:text-white text-4xl'>
-            <span className='px-2 py-1 bg-gradient-to-r from-green-400 via-teal-500 to-blue-500 rounded-lg text-gray-100'>
+        <div className="flex-1">
+          <Link to="/" className="font-bold dark:text-white text-4xl">
+            <span className="px-2 py-1 bg-gradient-to-r from-green-400 via-teal-500 to-blue-500 rounded-lg text-gray-100">
               Blog Mingle
             </span>
           </Link>
-          <p className='text-sm mt-5'>
-            Experience seamless access by signing up...          </p>
+          <p className="text-sm mt-5">Experience seamless access by signing up...</p>
         </div>
         {/* right */}
-
-        <div className='flex-1'>
-          <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+        <div className="flex-1">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
-              <Label value='Enter Your email' />
+              <Label value="Enter Your email" />
               <TextInput
-                type='email'
-                placeholder='name@company.com'
-                id='email'
+                type="email"
+                placeholder="name@company.com"
+                id="email"
                 onChange={handleChange}
               />
             </div>
             <div>
-              <Label value='Enter Your password' />
+              <Label value="Enter Your password" />
               <TextInput
-                type='password'
-                placeholder='**********'
-                id='password'
+                type="password"
+                placeholder="**********"
+                id="password"
                 onChange={handleChange}
               />
             </div>
-            <Button
-              gradientDuoTone='tealToLime'
-              type='submit'
-              disabled={loading}
-            >
+            <Button gradientDuoTone="tealToLime" type="submit" disabled={loading}>
               {loading ? (
                 <>
-                  <Spinner size='sm' />
-                  <span className='pl-3'>Just a moment...</span>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Just a moment...</span>
                 </>
               ) : (
                 'Sign In'
@@ -94,14 +91,14 @@ export default function SignIn() {
             </Button>
             <OAuth />
           </form>
-          <div className='flex gap-2 text-sm mt-5'>
+          <div className="flex gap-2 text-sm mt-5">
             <span>Don't Have an account?</span>
-            <Link to='/sign-up' className='text-blue-500'>
+            <Link to="/sign-up" className="text-blue-500">
               Sign Up
             </Link>
           </div>
           {errorMessage && (
-            <Alert className='mt-5' color='failure'>
+            <Alert className="mt-5" color="failure">
               {errorMessage}
             </Alert>
           )}
