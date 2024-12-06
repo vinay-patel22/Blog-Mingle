@@ -134,7 +134,7 @@ export default function DashboardComp() {
                             <Table.HeadCell>Username</Table.HeadCell>
                         </Table.Head>
                         {users &&
-                            users.map((user) => (
+                            users?.map((user) => (
                                 <Table.Body key={user._id} className='divide-y'>
                                     <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                                         <Table.Cell>
@@ -163,7 +163,7 @@ export default function DashboardComp() {
                             <Table.HeadCell>Likes</Table.HeadCell>
                         </Table.Head>
                         {comments &&
-                            comments.map((comment) => (
+                            comments?.map((comment) => (
                                 <Table.Body key={comment._id} className='divide-y'>
                                     <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                                         <Table.Cell className='w-96'>
@@ -189,7 +189,7 @@ export default function DashboardComp() {
                             <Table.HeadCell>Category</Table.HeadCell>
                         </Table.Head>
                         {posts &&
-                            posts.map((post) => (
+                            posts?.map((post) => (
                                 <Table.Body key={post._id} className='divide-y'>
                                     <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                                         <Table.Cell>

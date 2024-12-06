@@ -68,7 +68,7 @@ export default function CommentSection({ postId }) {
             if (res.ok) {
                 const data = await res.json();
                 setComments(
-                    comments.map((comment) =>
+                    comments?.map((comment) =>
                         comment._id === commentId
                             ? {
                                 ...comment,
@@ -86,7 +86,7 @@ export default function CommentSection({ postId }) {
 
     const handleEdit = async (comment, editedContent) => {
         setComments(
-            comments.map((c) =>
+            comments?.map((c) =>
                 c._id === comment._id ? { ...c, content: editedContent } : c
             )
         );
@@ -172,7 +172,7 @@ export default function CommentSection({ postId }) {
                             <p>{comments.length}</p>
                         </div>
                     </div>
-                    {comments.map((comment) => (
+                    {comments?.map((comment) => (
                         <Comment
                             key={comment._id}
                             comment={comment}

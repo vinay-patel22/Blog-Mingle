@@ -72,7 +72,7 @@ export default function DashUsers() {
                             <Table.HeadCell>Admin</Table.HeadCell>
                             <Table.HeadCell>Delete</Table.HeadCell>
                         </Table.Head>
-                        {users.map((user) => (
+                        {users?.map((user) => (
                             <Table.Body className='divide-y' key={user._id}>
                                 <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                                     <Table.Cell>
