@@ -28,12 +28,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: [
-      "https://blog-mingle.onrender.com",
-      "blog-mingle.firebaseapp.com",
-      "blog-mingle.web.app",
-      "blog-mingle.onrender.com",
-    ],
+    origin: ["blog-mingle.firebaseapp.com", "blog-mingle.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
